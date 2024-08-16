@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const cafeId = 1231;
+        const noticeMenuId = 12;
+        const chatrooms = { "123123": "채팅방1", "123124": "채팅방2", "123125": "채팅방3" };
+        const activeChatroomId = ["123123", "123124"];
+
+        function setCafeIdDiv() {
+            const cafeIdDiv = $("#cafe-id");
+            cafeIdDiv.append("<span>카페 ID: " + cafeId + "</span>");
+
+            const span = $('<span></span>');
+            const input = $('<input type="text" id="cafe-id-input">');
+            span.append(input);
+
+            const button = $('<button id="cafe-id-button">변경</button>');
+            button.on("click", function () {
+                fetch('/admin/cafeId', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cafeId: input.val() }),
+                }).then(() => {
+                    location.reload();
+                }).catch((error) => {
+                    alert('카페 ID 변경 중 에러 발생');
+                    console.error('Error:', error);
+                });
+            });
+
+            span.append("&nbsp;&nbsp;");
+            span.append(button);
+            cafeIdDiv.append(span);
+        }
+
+        function setNoticeMenuIdDiv() {
+            const noticeMenuIdDiv = $("#notice-menu-id");
+            noticeMenuIdDiv.append("<span>공지사항 메뉴 ID: " + noticeMenuId + "</span>");
+
+            const span = $('<span></span>');
+            const input = $('<input type="text" id="notice-menu-id-input">');
+            span.append(input);
+
+            const button = $('<button id="notice-menu-id-button">변경</button>');
+            button.on("click", function () {
+                fetch('/admin/noticeMenuId', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ noticeMenuId: input.val() }),
+                }).then(() => {
+                    location.reload();
+                }).catch((error) => {
+                    alert('공지사항 메뉴 ID 변경 중 에러 발생');
+                    console.error('Error:', error);
+                });
+            });
+
+            span.append("&nbsp;&nbsp;");
+            span.append(button);
+            noticeMenuIdDiv.append(span);
+        }
+
+        function setChatroomsDiv() {
+            const chatroomsDiv = $("#chatrooms");
+            const chatroomsTable = $('<table id="chatrooms-table"></table>');
+
+            chatroomsTable.append('<tr><th>채팅방 ID</th><th>채팅방 이름</th><th>활성화</th></tr>');
+            for (let key in chatrooms) {
+                const chatroomTr = $('<tr></tr>');
+                chatroomTr.append('<td class="chatrooms-key">' + key + '</td>');
+                chatroomTr.append('<td>' + chatrooms[key] + '</td>');
+                chatroomTr.append('<td></td>');
+
+
+                let button = null;
+                let method = null;
+                let isActive = activeChatroomId.includes(key);
+                if (isActive) {
+                    chatroomTr.css("background-color", "springgreen");
+                    button = $('<button class="chatrooms-deactivate-button">비활성화</button>');
+                    method = "DELETE";
+                } else {
+                    button = $('<button class="chatrooms-activate-button">활성화</button>');
+                    method = "POST";
+                }
+
+                button.on("click", function () {
+                    fetch('/admin/activeChatroomList', {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ chatroomId: key }),
+                    }).then(() => {
+                        location.reload();
+                    }).catch((error) => {
+                        alert('채팅방 활성화 여부 변경 중 에러 발생');
+                        console.error('Error:', error);
+                    });
+                });
+
+                chatroomTr.find("td:last").append(button);
+                chatroomsTable.append(chatroomTr);
+            }
+
+            chatroomsDiv.append(chatroomsTable);
+        }
+
+        $(function () {
+            setCafeIdDiv();
+            setNoticeMenuIdDiv();
+            setChatroomsDiv();
+        });
+    </script>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        body {
+            margin: 0 auto;
+            width: 800px;
+        }
+
+        input[type="text"] {
+            width: 100px;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            width: 400px;
+        }
+    </style>
+    <title></title>
+</head>
+
+<body>
+    <h1>어드민 페이지입니다.</h1>
+    <div id="cafe-id" class="flex-container"></div>
+    <br>
+    <div id="notice-menu-id" class="flex-container"></div>
+    <br>
+    <div id="chatrooms">
+        <h3>채팅방 목록</h3>
+    </div>
+</body>
+
+</html>
