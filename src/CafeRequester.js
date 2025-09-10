@@ -109,7 +109,7 @@ async function getPreviewImgUrl(articleId) {
             }
         });
     const body = await response.json();
-    const articles = body.articles.items;
+    const articles = body.result.articles.items;
 
     let result = null;
     for (let article of articles) {
