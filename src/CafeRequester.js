@@ -102,7 +102,7 @@ async function cafeArticleParser(article) {
 
 async function getPreviewImgUrl(articleId) {
     console.log("Start getting preview image of article id: " + articleId);
-    const response = await fetch("https://apis.naver.com/cafe-web/cafe-articleapi/cafes/" + await getCafeId() + "/articles/" + articleId + "/siblings?limit=3",
+    const response = await fetch("https://article.cafe.naver.com/gw/v3.1/cafes/" + await getCafeId() + "/articles/" + articleId + "/siblings?limit=3",
         {
             headers: {
                 "Cookie": getCookie()
