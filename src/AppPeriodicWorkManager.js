@@ -25,7 +25,7 @@ async function checkNewArticlesAndSendMessageToBot() {
         let message = MessageFormatter.formatNewArticleNoticeMessage
             (article.menuName, article.title, article.writer, article.url, article.isNotice, article.previewImgUrl);
         let body = ChatbotManager.sendMessageBodyFormmatter(message, article.previewImgUrl);
-        ChatbotManager.sendMessage(activeChatRoomSet, body);
+        await ChatbotManager.sendMessage(activeChatRoomSet, body);
     }
 
     await DBManager.setKey("cafe-article-last-timestamp", lastArticles[0].timestamp);

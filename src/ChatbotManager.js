@@ -32,26 +32,27 @@ async function deleteWebhook() {
     });
 }
 
-function sendMessage(chatroomIdSet, body) {
+async function sendMessage(chatroomIdSet, body) {
     console.log("bot sendMessage() body : ");
     console.log(JSON.stringify(body));
     for (let chatroomId of chatroomIdSet) {
         console.log("Sending message to chatroom id: " + chatroomId);
         body.chat_id = chatroomId;
-        fetch(getApiUrl() + "/sendMessage", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        })
-            .then(() => {
-                console.log("Message sent successfully to chatroom id: " + chatroomId);
-            })
-            .catch((error) => {
-                console.error("Error occurred sending message to chatroom id: " + chatroomId);
-                console.error(error);
+        try {
+            const response = await fetch(getApiUrl() + "/sendMessage", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body),
             });
+            console.log("Message sent to chatroom id: " + chatroomId);
+            console.log("Response status: " + response.status);
+            console.log("Response body: " + await response.text());
+        } catch (error) {
+            console.error("Error occurred sending message to chatroom id: " + chatroomId);
+            console.error(error);
+        }
     }
 }
 
@@ -64,7 +65,7 @@ function sendMessageBodyFormmatter(text, previewImgUrl = null) {
     };
 
     if (previewImgUrl)
-        body.link_preview_options = {url: previewImgUrl};
+        body.link_preview_options = { url: previewImgUrl };
 
     return body;
 }
