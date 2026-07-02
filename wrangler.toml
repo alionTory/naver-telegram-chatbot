@@ -1,5 +1,4 @@
 #:schema node_modules/wrangler/config-schema.json
-name = "starrysouls-chatbot"
 main = "src/index.ts"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
@@ -8,8 +7,30 @@ compatibility_flags = ["nodejs_compat"]
 crons = [ "*/2 * * * *" ]
 
 [[kv_namespaces]]
-binding = "starrysouls-chatbot"
+binding = "kv-binding"
+
+[vars]
+WORKER_APP_URL = ""
+
+[env.starrysouls]
+name = "starrysouls-chatbot"
+
+[env.starrysouls.vars]
+WORKER_APP_URL = "https://starrysouls-chatbot.nocurim67.workers.dev"
+
+[[env.starrysouls.kv_namespaces]]
+binding = "kv-binding"
 id = "b51fc6d3365b426b831b5fd9735a86dc"
+
+[env.gong2dl]
+name = "gong2dl-chatbot"
+
+[env.gong2dl.vars]
+WORKER_APP_URL = "https://gong2dl-chatbot.nocurim67.workers.dev/"
+
+[[env.gong2dl.kv_namespaces]]
+binding = "kv-binding"
+id = "a0c9e7e459cb41d4b7e95639d35a2dc1"
 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure

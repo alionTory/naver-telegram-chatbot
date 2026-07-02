@@ -1,11 +1,11 @@
+import { env as workerEnv } from "cloudflare:workers";
+
 class CloudflareKVManager {
-    env: Env;
     kvEnv: KVNamespace;
 
     constructor(env: Env) {
         console.log("CloudflareKVManager created");
-        this.env = env;
-        this.kvEnv = env["starrysouls-chatbot"];
+        this.kvEnv = env["kv-binding"];
     }
 
     get(key: string) {
@@ -63,10 +63,7 @@ async function getNumber(key: string) {
 }
 
 function env() {
-    if (!instance) {
-        throw new Error("DBManager not initialized");
-    }
-    return instance.env;
+    return workerEnv;
 }
 
 export { initDBManager, set, get, getNumber, env };

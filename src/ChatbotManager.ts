@@ -1,5 +1,4 @@
 import * as DBManager from './DBManager';
-import * as globalVariables from './GlobalVariables';
 
 let apiUrl: string;
 
@@ -11,7 +10,7 @@ function getApiUrl() {
 }
 
 async function setWebhook(urlPath: string) {
-    let webhookUrl = globalVariables.appURL + urlPath;
+    const webhookUrl = DBManager.env().WORKER_APP_URL + urlPath;
     console.log("Setting webhook to " + webhookUrl);
     return fetch(getApiUrl() + "/setWebhook", {
         method: "POST",
