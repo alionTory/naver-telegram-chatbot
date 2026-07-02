@@ -18,7 +18,7 @@ const ChatbotUpdateBody = z.object({
     }),
 });
 
-async function initURLMapper() {
+function initURLMapper() {
     // 챗봇 webhook를 통해 챗봇이 채팅방에 입장, 탈퇴할 때마다 애플리케이션에 알림
     // 아래의 path에서 챗봇의 알림 request를 처리하여 애플리케이션의 DB를 업데이트
     URLMapper.addPath('/chatbotUpdate', async function (request: Request) {
