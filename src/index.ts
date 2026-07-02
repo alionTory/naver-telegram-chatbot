@@ -7,18 +7,17 @@
  *
  * Learn more at https://developers.cloudflare.com/workers/
  */
-const requestToAppManager = require('./requestToAppManager');
-const AdminPageController = require('./AdminPageController');
-const URLMapper = require('./urlMapper').getInstance();
-const DBManager = require('./DBManager');
-const ChatbotReqeuqstController = require('./ChatbotRequestController');
-const AppPeriodicWorkManager = require('./AppPeriodicWorkManager');
-
-const CLOUDFLARE_KV_NAMESPACE = "starrysouls-chatbot";
+import * as requestToAppManager from './requestToAppManager';
+import * as AdminPageController from './AdminPageController';
+import { getInstance } from './URLMapper';
+const URLMapper = getInstance();
+import * as DBManager from './DBManager';
+import * as ChatbotReqeuqstController from './ChatbotRequestController';
+import * as AppPeriodicWorkManager from './AppPeriodicWorkManager';
 
 export default {
 	async scheduled(event, env, ctx) {
-		DBManager.initDBManager(env, CLOUDFLARE_KV_NAMESPACE);
+		DBManager.initDBManager(env);
 		try {
 			await AppPeriodicWorkManager.checkNewArticlesAndSendMessageToBot();
 		} catch (e) {
@@ -28,11 +27,11 @@ export default {
 	},
 
 	async fetch(request, env, ctx) {
-		DBManager.initDBManager(env, CLOUDFLARE_KV_NAMESPACE);
+		DBManager.initDBManager(env);
 		//DBManager.setKey("chatroom-list", '{"1231231":"춤별혼 통합","412341":"일본조","459710":"비극조"}');  // 테스트용
 
 		AdminPageController.initURLMapper();
 		ChatbotReqeuqstController.initURLMapper();
 		return requestToAppManager.appProcessRequest(request);
 	},
-};
+} satisfies ExportedHandler<Env>;

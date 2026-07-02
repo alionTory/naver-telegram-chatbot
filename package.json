@@ -10,10 +10,14 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.17.0",
+    "@types/cookie": "^0.6.0",
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.9",
     "wrangler": "^4.106.0"
   },
   "dependencies": {
-    "cookie": "^0.6.0"
+    "cookie": "^0.6.0",
+    "zod": "^4.4.3"
   }
 }
