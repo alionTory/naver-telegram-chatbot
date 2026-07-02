@@ -20,16 +20,9 @@ export default {
 	async scheduled(event, env, ctx) {
 		DBManager.initDBManager(env, CLOUDFLARE_KV_NAMESPACE);
 		try {
-			const isScheduledWorkInProgress = DBManager.getKey("isScheduledWorkInProgress");
-			if (isScheduledWorkInProgress === "true") {
-				console.log("Scheduled work is already in progress. Skipping this time.");
-				return;
-			}
-			await DBManager.setKey("isScheduledWorkInProgress", "true");
 			await AppPeriodicWorkManager.checkNewArticlesAndSendMessageToBot();
 		} catch (e) {
 			console.log(e);
-			await DBManager.setKey("isScheduledWorkInProgress", "false");
 			throw e;
 		}
 	},
