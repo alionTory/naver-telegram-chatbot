@@ -26,7 +26,7 @@ id = "b51fc6d3365b426b831b5fd9735a86dc"
 name = "gong2dl-chatbot"
 
 [env.gong2dl.vars]
-WORKER_APP_URL = "https://gong2dl-chatbot.nocurim67.workers.dev/"
+WORKER_APP_URL = "https://gong2dl-chatbot.nocurim67.workers.dev"
 
 [[env.gong2dl.kv_namespaces]]
 binding = "kv-binding"
