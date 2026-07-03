@@ -3,41 +3,46 @@ import * as cookieModule from 'cookie';
 import * as CafeApiSchemas from './CafeApiSchemas';
 import * as z from 'zod';
 
-let cafeId: string;
-let cafeCode: string;
-let cafeNoticeMenuId: number;
 let cafeAuthCookie: string;
 
 async function getCafeId() {
+    let cafeId = DBManager.getStringCache("cafe-id");
     if (!cafeId) {
         console.log("Fetching cafe-id from DB...");
         cafeId = z.string().parse(await DBManager.get("cafe-id"));
+        DBManager.setStringCache("cafe-id", cafeId);
     }
     return cafeId;
 }
 
 async function getCafeCode() {
+    let cafeCode = DBManager.getStringCache("cafe-code");
     if (!cafeCode) {
         console.log("Fetching cafe-code from DB...");
         cafeCode = z.string().parse(await DBManager.get("cafe-code"));
+        DBManager.setStringCache("cafe-code", cafeCode);
     }
     return cafeCode;
 }
 
 async function getNoticeMenuId() {
+    let cafeNoticeMenuId = DBManager.getNumberCache("notice-menu-id");
     if (!cafeNoticeMenuId) {
         console.log("Fetching notice-menu-id from DB...");
-        cafeNoticeMenuId = z.number().parse(await DBManager.get("notice-menu-id"));
+        cafeNoticeMenuId = z.number().parse(await DBManager.getNumber("notice-menu-id"));
+        DBManager.setNumberCache("notice-menu-id", cafeNoticeMenuId);
     }
     return cafeNoticeMenuId;
 }
 
 function getCookie() {
+    let cafeAuthCookie = DBManager.getStringCache("cafe-auth-cookie");
     if (!cafeAuthCookie) {
         cafeAuthCookie = "NID_AUT=";
         cafeAuthCookie += DBManager.env().CAFE_COOKIE_NID_AUT;
         cafeAuthCookie += "; NID_SES=";
         cafeAuthCookie += DBManager.env().CAFE_COOKIE_NID_SES;
+        DBManager.setStringCache("cafe-auth-cookie", cafeAuthCookie);
     }
     return cafeAuthCookie;
 }
