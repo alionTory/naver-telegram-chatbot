@@ -1,10 +1,10 @@
 import * as DBManager from './DBManager';
 
-let apiUrl: string;
-
 function getApiUrl() {
+    let apiUrl = DBManager.getStringCacheSync("telegram-api-url");
     if (!apiUrl) {
         apiUrl = "https://api.telegram.org/bot" + DBManager.env().CHATBOT_API_TOKEN;
+        DBManager.setStringCacheSync("telegram-api-url", apiUrl);
     }
     return apiUrl;
 }

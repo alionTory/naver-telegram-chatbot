@@ -2,14 +2,16 @@ import { env as workerEnv } from "cloudflare:workers";
 
 class CloudflareKVManager {
     kvEnv: KVNamespace;
-    stringCache: Map<string, string>;
-    numberCache: Map<string, number>;
+    stringCache: Map<string, Promise<string>>;
+    numberCache: Map<string, Promise<number>>;
+    stringCacheSync: Map<string, string>;
 
     constructor(env: Env) {
         console.log("CloudflareKVManager created");
         this.kvEnv = env["kv-binding"];
         this.stringCache = new Map();
         this.numberCache = new Map();
+        this.stringCacheSync = new Map();
     }
 
     get(key: string) {
@@ -25,15 +27,22 @@ class CloudflareKVManager {
         return this.stringCache.get(key);
     }
 
-    setStringCache(key: string, value: string) {
+    setStringCache(key: string, value: Promise<string>) {
         this.stringCache.set(key, value);
+    }
+
+    getStringCacheSync(key: string) {
+        return this.stringCacheSync.get(key);
+    }
+    setStringCacheSync(key: string, value: string) {
+        this.stringCacheSync.set(key, value);
     }
 
     getNumberCache(key: string) {
         return this.numberCache.get(key);
     }
 
-    setNumberCache(key: string, value: number) {
+    setNumberCache(key: string, value: Promise<number>) {
         this.numberCache.set(key, value);
     }
 
@@ -90,11 +99,28 @@ function getStringCache(key: string) {
     return instance.getStringCache(key);
 }
 
-function setStringCache(key: string, value: string) {
+function setStringCache(key: string, value: Promise<string> | string) {
     if (!instance) {
         throw new Error("DBManager not initialized");
     }
+    if (typeof value === "string") {
+        value = Promise.resolve(value);
+    }
     instance.setStringCache(key, value);
+}
+
+function getStringCacheSync(key: string) {
+    if (!instance) {
+        throw new Error("DBManager not initialized");
+    }
+    return instance.getStringCacheSync(key);
+}
+
+function setStringCacheSync(key: string, value: string) {
+    if (!instance) {
+        throw new Error("DBManager not initialized");
+    }
+    instance.setStringCacheSync(key, value);
 }
 
 function getNumberCache(key: string) {
@@ -104,9 +130,12 @@ function getNumberCache(key: string) {
     return instance.getNumberCache(key);
 }
 
-function setNumberCache(key: string, value: number) {
+function setNumberCache(key: string, value: Promise<number> | number) {
     if (!instance) {
         throw new Error("DBManager not initialized");
+    }
+    if (typeof value === "number") {
+        value = Promise.resolve(value);
     }
     instance.setNumberCache(key, value);
 }
@@ -115,4 +144,4 @@ function env() {
     return workerEnv;
 }
 
-export { initDBManager, set, get, getNumber, getStringCache, setStringCache, getNumberCache, setNumberCache, env };
+export { initDBManager, set, get, getNumber, getStringCache, setStringCache, getNumberCache, setNumberCache, env, getStringCacheSync, setStringCacheSync };
