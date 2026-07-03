@@ -11,7 +11,7 @@ async function getChatRoomList() {
         chatRoomJson = "{}";
 
     console.log("Parsing chatroom list json...");
-    const parsedChatRoomList = ChatRoomList.parse(chatRoomJson);
+    const parsedChatRoomList = ChatRoomList.parse(JSON.parse(chatRoomJson));
 
     console.log("Successfully retrieved and parsed chatroom list.");
     return parsedChatRoomList;
