@@ -12,11 +12,17 @@ binding = "kv-binding"
 [vars]
 WORKER_APP_URL = ""
 
+[secrets]
+required = ["ADMIN_PAGE_PASSWORD", "CHATBOT_API_TOKEN", "CHATBOT_WEBHOOK_TOKEN", "CAFE_COOKIE_NID_AUT", "CAFE_COOKIE_NID_SES"]
+
 [env.starrysouls]
 name = "starrysouls-chatbot"
 
 [env.starrysouls.vars]
 WORKER_APP_URL = "https://starrysouls-chatbot.nocurim67.workers.dev"
+
+[env.starrysouls.secrets]
+required = ["ADMIN_PAGE_PASSWORD", "CHATBOT_API_TOKEN", "CHATBOT_WEBHOOK_TOKEN", "CAFE_COOKIE_NID_AUT", "CAFE_COOKIE_NID_SES"]
 
 [[env.starrysouls.kv_namespaces]]
 binding = "kv-binding"
@@ -27,6 +33,9 @@ name = "gong2dl-chatbot"
 
 [env.gong2dl.vars]
 WORKER_APP_URL = "https://gong2dl-chatbot.nocurim67.workers.dev"
+
+[env.gong2dl.secrets]
+required = ["ADMIN_PAGE_PASSWORD", "CHATBOT_API_TOKEN", "CHATBOT_WEBHOOK_TOKEN", "CAFE_COOKIE_NID_AUT", "CAFE_COOKIE_NID_SES"]
 
 [[env.gong2dl.kv_namespaces]]
 binding = "kv-binding"
