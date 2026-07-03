@@ -343,7 +343,7 @@ function getAdminPage(cafeId: number | null, noticeMenuId: number | null, chatro
     <div id="chatbot-webhook">
         <span>현재 챗봇 webhook URL : </span><span id="chatbot-webhook-url-current">불러오는 중</span>
         <br>
-        <input type="text" id="chatbot-webhook-url-new" placeholder="웹훅 url">
+        <input type="text" id="chatbot-webhook-url-new" placeholder="웹훅 url" value="/chatbotUpdate">
         <button id="chatbot-webhook-set">변경</button>
         <button id="chatbot-webhook-delete">제거</button>
     </div>
