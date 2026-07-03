@@ -252,6 +252,23 @@ function getAdminPage(cafeId: number | null, noticeMenuId: number | null, chatro
             chatroomsDiv.append(chatroomsTable);
         }
 
+        function setManuallyTriggerCronJobButton() {
+            $("#manually-trigger-cron-job-button").on("click", function () {
+                fetch('/admin/triggerManualCronJob', {
+                    method: 'POST',
+                }).then(response => {
+                    if (response.ok) {
+                        alert('수동 메시지 전송 완료');
+                    } else {
+                        alert('수동 메시지 전송 중 에러 발생: ' + response.status);
+                    }
+                }).catch((error) => {
+                    alert('수동 메시지 전송 중 에러 발생');
+                    console.error('Error:', error);
+                });
+            });
+        }
+
         $(function () {
             setCafeIdDiv();
             setNoticeMenuIdDiv();
@@ -259,6 +276,7 @@ function getAdminPage(cafeId: number | null, noticeMenuId: number | null, chatro
             setChatroomsDiv();
             loadWebhookInfo();
             setWebhookSettingButton();
+            setManuallyTriggerCronJobButton();
         });
     </script>
     <style>
@@ -286,6 +304,36 @@ function getAdminPage(cafeId: number | null, noticeMenuId: number | null, chatro
             justify-content: space-between;
             width: 400px;
         }
+
+        .flex-container-center {
+            display: flex;
+            justify-content: center;
+            width: 400px;
+        }
+        
+        #manually-trigger-cron-job-button {
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #ffffff 0%, #eef2ff 100%);
+            border: 1.5px solid #2575fc;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(37, 117, 252, 0.18);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        #manually-trigger-cron-job-button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #eef2ff 0%, #dbe4ff 100%);
+            box-shadow: 0 6px 16px rgba(37, 117, 252, 0.28);
+        }
+
+        #manually-trigger-cron-job-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(37, 117, 252, 0.22);
+        }
     </style>
     <title></title>
 </head>
@@ -305,6 +353,10 @@ function getAdminPage(cafeId: number | null, noticeMenuId: number | null, chatro
     <div id="notice-menu-id" class="flex-container"></div>
     <br>
     <div id="last-article-timestamp" class="flex-container"></div>
+    <br>
+    <div id="manually-trigger-cron-job" class="flex-container-center">
+        <button id="manually-trigger-cron-job-button">카페봇 메시지 전송(수동)</button>
+    </div>
     <br>
     <div id="chatrooms">
         <h3>채팅방 목록</h3>

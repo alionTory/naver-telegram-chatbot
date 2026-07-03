@@ -7,6 +7,7 @@ import * as pages from './AdminPages';
 import * as ChatbotManager from './ChatbotManager';
 import * as CafeRequester from './CafeRequester';
 import * as z from 'zod';
+import * as AppPeriodicWorkManager from './AppPeriodicWorkManager';
 
 // 서버에서 세션 id를 가져오는 함수
 async function getSessionId() {
@@ -205,6 +206,22 @@ function initURLMapper() {
         console.log(JSON.stringify(chatbotRespondJson));
         return new Response("Webhook URL 삭제 완료", { status: 200 });
     }, "DELETE");
+
+    URLMapper.addPath('/admin/triggerManualCronJob', async function (request) {
+        if (!await isDebugPageEnabled())
+            return new Response("503 Service Unavailable", { status: 503 });
+        if (!await isClientAuthenticated(request))
+            return new Response(pages.page401, { status: 401, headers: { 'Content-Type': 'text/html' } });
+
+        try {
+            await AppPeriodicWorkManager.checkNewArticlesAndSendMessageToBot();
+        } catch (e) {
+            console.error("Error occurred while manually executing cron job:");
+            console.error(e);
+            return new Response("Error occurred while manually executing cron job: " + e, { status: 500 });
+        }
+        return new Response("Manual cron job executed successfully", { status: 200 });
+    }, "POST");
 }
 
 export { initURLMapper };
