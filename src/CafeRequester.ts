@@ -73,9 +73,9 @@ async function requestCafeCode(cafeId: string) {
  */
 async function getDbLastArticleTimestamp() {
     let result = 0;
-    const dbLastArticleTimestampParseResult = z.number().safeParse(await DBManager.get("cafe-article-last-timestamp"));
-    if (dbLastArticleTimestampParseResult.success)
-        result = dbLastArticleTimestampParseResult.data;
+    const dbLastArticleTimestamp = await DBManager.getNumber("cafe-article-last-timestamp");
+    if (dbLastArticleTimestamp)
+        result = dbLastArticleTimestamp;
     return result;
 }
 
@@ -95,7 +95,12 @@ async function isLastOneArticleNew() {
     if (!article)
         result = false;
     else {
-        result = (article.writeDateTimestamp > await getDbLastArticleTimestamp());
+        console.log("Last article timestamp: " + article.writeDateTimestamp);
+
+        console.log("Retrieving last article timestamp from DB...");
+        const dbLastArticleTimestamp = await getDbLastArticleTimestamp();
+        console.log("DB last article timestamp: " + dbLastArticleTimestamp);
+        result = (article.writeDateTimestamp > dbLastArticleTimestamp);
     }
 
     console.log("isLastOneArticleNew() to cafeid " + cafeId + " result: " + result);

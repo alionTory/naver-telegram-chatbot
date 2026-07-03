@@ -74,7 +74,7 @@ function get(key: string) {
 
 /**
  * DB에 key가 있고, 대응하는 값이 number로 변환 가능하면 number 반환.  
- * 그렇지 않으면 undefined 반환.
+ * 그렇지 않으면 null 반환.
  */
 async function getNumber(key: string) {
     if (!instance) {
