@@ -63,19 +63,6 @@ async function requestCafeCode(cafeId: string) {
     return cafeCode;
 }
 
-function getArticleListFromResponseBody(body: unknown) {
-    const articleList = (body as any)?.message?.result?.articleList;
-    if (!Array.isArray(articleList)) {
-        let errorMessage = "body.message.result.articleList not found in Naver API response.";
-        if (articleList)
-            errorMessage += " articleList is not an array: " + JSON.stringify(articleList);
-        else
-            errorMessage += " articleList is undefined or null.";
-        throw new Error(errorMessage);
-    }
-    return articleList;
-}
-
 /**
  * Return number type value of key "cafe-article-last-timestamp" from DB.  
  * If value not found in DB, return 0.
